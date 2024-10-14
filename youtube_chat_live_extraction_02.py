@@ -16,7 +16,7 @@ batch_size = 10
 driver = webdriver.Chrome(service=service)
 
 # Open the YouTube video with chat
-driver.get('https://www.youtube.com/watch?v=EegbMLwntE4') 
+driver.get('https://www.youtube.com/watch?v=HPxifkx1Mmo') 
 
 # Wait for the page to load
 time.sleep(5)
