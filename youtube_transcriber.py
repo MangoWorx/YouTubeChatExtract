@@ -1,7 +1,7 @@
 from youtube_transcript_api import YouTubeTranscriptApi
 
 # Replace with your YouTube video ID
-video_id = 'bDGH2m3DYog'
+video_id = 'oGBmEK_FwXQ'
 
 # Fetch the transcript
 try:

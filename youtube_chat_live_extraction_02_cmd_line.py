@@ -1,9 +1,17 @@
+import sys
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 import time
 import datetime
 from selenium.common.exceptions import StaleElementReferenceException, WebDriverException
+
+# Check if URL is provided
+if len(sys.argv) < 2:
+    print("Usage: python youtube_chat_live_extraction_02.py <YouTube URL>")
+    sys.exit(1)
+
+youtube_url = sys.argv[1]
 
 # Path to ChromeDriver
 driver_path = r'C:\Users\richa\Documents\chromedriver-win64\chromedriver.exe'
@@ -16,7 +24,7 @@ batch_size = 10
 driver = webdriver.Chrome(service=service)
 
 # Open the YouTube video with chat
-driver.get('https://www.youtube.com/watch?v=HPxifkx1Mmo') 
+driver.get(youtube_url)
 
 # Wait for the page to load
 time.sleep(5)
@@ -37,7 +45,7 @@ seen_messages = set()
 message_batch = []
 
 # Continuously check for new messages and append them to the file in batches
-with open(r'C:\Users\richa\Desktop\YouTube Chat\youtube_zendoo_chat.txt', "a", encoding="utf-8") as f:
+with open(rf'C:\Users\richa\Desktop\YouTube Chat\{youtube_url.split("=")[-1]}_chat.txt', "a", encoding="utf-8") as f:
     while True:
         try:
             # Scroll through the chat to load new messages
@@ -58,7 +66,6 @@ with open(r'C:\Users\richa\Desktop\YouTube Chat\youtube_zendoo_chat.txt', "a", e
                         break
             except WebDriverException as e:
                 print(f"WebDriverException encountered during initial scroll handling: {e}")
-
 
             # Extract chat messages
             try:
@@ -96,14 +103,14 @@ with open(r'C:\Users\richa\Desktop\YouTube Chat\youtube_zendoo_chat.txt', "a", e
                 print("StaleElementReferenceException encountered while processing messages, retrying...")
             except WebDriverException as e:
                 print(f"WebDriverException encountered while extracting messages: {e}")
-                
+
         except WebDriverException as e:
             print(f"WebDriverException encountered in main loop: {e}")
             time.sleep(5)  # Wait for a few seconds before retrying in case of a temporary disconnect
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
             time.sleep(5)  # Optionally wait before retrying to prevent rapid errors
-        
+
         # If there's any leftover in the batch, write it before waiting again
         if message_batch:
             f.write("\n".join(message_batch) + "\n")
@@ -114,3 +121,10 @@ with open(r'C:\Users\richa\Desktop\YouTube Chat\youtube_zendoo_chat.txt', "a", e
         time.sleep(10)  # Adjust time as needed for how often you want to check for new messages
 
 # Note: To stop the script, manually interrupt the process (Ctrl + C).
+
+#How to run
+#Running Multiple Instances: Open a terminal or command prompt and run multiple instances with different YouTube URLs:
+#python youtube_chat_live_extraction_02.py https://www.youtube.com/watch?v=videoID1
+#python youtube_chat_live_extraction_02.py https://www.youtube.com/watch?v=videoID2
+#python youtube_chat_live_extraction_02.py https://www.youtube.com/watch?v=videoID3
+

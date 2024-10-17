@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Chat Extractor Control</title>
+</head>
+<body>
+    <h1>YouTube Chat Extractor</h1>
+    <form action="/start" method="post">
+        <label for="youtube_url">YouTube URL:</label>
+        <input type="text" id="youtube_url" name="youtube_url" required>
+        <button type="submit">Start Script</button>
+    </form>
+    <form action="/stop" method="post" style="margin-top: 20px;">
+        <button type="submit">Stop Script</button>
+    </form>
+</body>
+</html>

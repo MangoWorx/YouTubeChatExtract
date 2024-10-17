@@ -1,3 +1,4 @@
+import sys
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -5,6 +6,13 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 import time
+
+# Check if URL is provided
+if len(sys.argv) < 2:
+    print("Usage: python youtube_transcript_live_stream.py <YouTube URL>")
+    sys.exit(1)
+
+youtube_url = sys.argv[1]
 
 # Path to ChromeDriver
 driver_path = r'C:\Users\richa\Documents\chromedriver-win64\chromedriver.exe'
@@ -14,7 +22,7 @@ service = Service(driver_path)
 driver = webdriver.Chrome(service=service)
 
 # Open the YouTube video page
-driver.get('https://www.youtube.com/watch?v=oGBmEK_FwXQ')
+driver.get(youtube_url)
 
 # Wait until the video page loads and then click the play button
 try:
@@ -40,7 +48,7 @@ try:
             captions_elements = WebDriverWait(driver, 10).until(
                 EC.presence_of_all_elements_located((By.CSS_SELECTOR, "span.ytp-caption-segment"))
             )
-            with open(r'C:\Users\richa\Desktop\YouTube Video\youtube_captions_live.txt', 'a', encoding='utf-8') as f:
+            with open(rf'C:\Users\richa\Desktop\YouTube Video\{youtube_url.split("=")[-1]}_captions_live.txt', 'a', encoding='utf-8') as f:
                 for caption in captions_elements:
                     if caption.text not in retrieved_lines:
                         f.write(caption.text + '\n')
@@ -62,3 +70,9 @@ except KeyboardInterrupt:
 
 finally:
     driver.quit()
+
+#How to run
+#Running Multiple Instances: Open a terminal or command prompt and run multiple instances with different YouTube URLs:
+#python youtube_transcript_live_stream.py https://www.youtube.com/watch?v=videoID1
+#python youtube_transcript_live_stream.py https://www.youtube.com/watch?v=videoID2
+#python youtube_transcript_live_stream.py https://www.youtube.com/watch?v=videoID3
